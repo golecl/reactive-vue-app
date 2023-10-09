@@ -36,6 +36,41 @@ export default async function getFiveDayPollution(latitude, longitude) {
 
         console.log(mergedData)
 
+        // Function to split array into chunks
+        function chunkArray(arr, chunkSize) {
+            const chunkedArray = [];
+            for (let i = 0; i < arr.length; i += chunkSize) {
+                chunkedArray.push(arr.slice(i, i + chunkSize));
+            }
+            return chunkedArray;
+        }
+
+        // Split mergedData into chunks of 24 values each
+        const chunkedData = chunkArray(mergedData, 24);
+
+        // Initialize an array to store the highest pm2_5 values
+        const highestPm2_5Values = [];
+
+        // Iterate through each chunk and find the highest pm2_5 value
+        chunkedData.forEach(chunk => {
+            let highestPm2_5 = chunk[0].components.pm2_5; // Initialize with the first pm2_5 value in the chunk
+            chunk.forEach(obj => {
+                const pm2_5Value = obj.components.pm2_5;
+                if (pm2_5Value > highestPm2_5) {
+                    highestPm2_5 = pm2_5Value; // Update if a higher pm2_5 value is found
+                }
+            });
+            highestPm2_5Values.push(highestPm2_5); // Add the highest value to the result array
+        });
+
+        console.log(highestPm2_5Values);
+
+        const needMask = highestPm2_5Values.map(value => value >= 10);
+
+        console.log(needMask);
+
+        return needMask;
+
     }
     catch (error) {
         throw new Error('Error fetching pollution data: ' + error.message);

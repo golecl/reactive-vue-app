@@ -29,20 +29,20 @@ export default async function getFiveDayCityForecast(latitude, longitude) {
         const averageTemp = Math.round(dayPeriods.reduce((accumulator, object) => {
           return accumulator + object.main.temp;
         }, 0) / 8);
-        const rain = Math.round(dayPeriods.reduce((accumulator, object) => {
+        const rain = (dayPeriods.reduce((accumulator, object) => {
           if (object && object.rain && object.rain["3h"] !== undefined) {
             return accumulator + object.rain["3h"];
           } else {
             return accumulator;
           }
-        }, 0));
-        const averageWindSpeed = Math.round(dayPeriods.reduce((accumulator, object) => {
+        }, 0)).toFixed(3);
+        const averageWindSpeed = (dayPeriods.reduce((accumulator, object) => {
           if (object && object.rain && object.wind.speed !== undefined) {
             return accumulator + object.wind.speed;
           } else {
             return accumulator;
           }
-        }, 0) / 8);
+        }, 0) / 8).toFixed(3);
         var tempRange = "";
 
         if (averageTemp < 13) {
