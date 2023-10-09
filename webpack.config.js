@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
+const DotenvWebpackPlugin = require('dotenv-webpack');
 
 module.exports = {
     mode: "development",
@@ -14,6 +15,11 @@ module.exports = {
         port: 9000,
         open: true,
     },
+    resolve: {
+        fallback: {
+          "path": false,
+        },
+      },      
     module: {
         rules: [
             {
@@ -54,6 +60,7 @@ module.exports = {
         ],
     },
     plugins: [
+        new DotenvWebpackPlugin(),
         new MiniCssExtractPlugin(),
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
